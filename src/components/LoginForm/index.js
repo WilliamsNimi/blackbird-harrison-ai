@@ -12,13 +12,26 @@ import logo from '../../assets/logo.svg';
 
 export default function LoginForm() {
   const [showAlert, setShowAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   const validateForm = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
 
-    // Add validation code here
+    var validator = require("email-validator");
+    const email_check = validator.validate(email);
+    const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,}$/;
+    const pword_check = regex.test(password);
+    
+    if (email_check === true && pword_check === true)
+    {
+      return true;
+    }
+    else 
+    {
+      return false;
+    }
 
   }
 
@@ -29,8 +42,13 @@ export default function LoginForm() {
       email: data.get('email'),
       password: data.get('password'),
     });
-    validateForm(event);
-    setShowAlert("Login Successful");
+    if (validateForm(event)){
+      setShowAlert("Login Successful");
+    }
+    else {
+      setShowErrorAlert("Email or Password Incorrect \nMinimum of 8 characters\nShould contains both uppercase and lowercase letter\nMinimum of 1 numerical digit (0-9)\nMinimum of 1 special character (!@#$%^&*, etc)");
+
+    }
   };
 
   return (
@@ -43,6 +61,16 @@ export default function LoginForm() {
           message={showAlert}
         >
           <Alert>{showAlert}</Alert>
+        </Snackbar>
+      }
+      {showErrorAlert &&
+        <Snackbar
+          open={showErrorAlert}
+          autoHideDuration={6000}
+          onClose={() => setShowErrorAlert(false)}
+          message={showErrorAlert}
+        >
+          <Alert severity="error" onClose={() => {}}>{showErrorAlert}</Alert>
         </Snackbar>
       }
       <Grid
