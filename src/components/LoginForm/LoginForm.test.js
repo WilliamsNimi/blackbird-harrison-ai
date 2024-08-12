@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import LoginForm from '.';
-import userEvent  from '@testing-library/user-event';
+import { validation } from './validation';
 
 test('renders sign in page', () => {
   render(<LoginForm />);
@@ -8,10 +8,12 @@ test('renders sign in page', () => {
   expect(signInText).toBeInTheDocument();
 });
 
-it('matches Regex', () => {
-  const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,}$/;
-  const password = 'Will@s1990'; 
-  expect (password).toMatch(regex);
+test('Correct Combination', () => {
+  expect(validation('williamson.nimi@gmail.com', 'Will@s1990')).toBe(true);
+  expect(validation('williamson.nimi@gmail.com', '12345')).toBe(false);
+  expect(validation('williamson.nimi@gmail.com', 'Willas1990')).toBe(false);
+  expect(validation('williamson.nimi@gmail.com', 'Will@s')).toBe(false);
+  expect(validation('williamson.nimi@', 'Will@s1990')).toBe(false);
 });
 
 // TODO: Add More Tests realted to UI testing. Ran into Jest Errors at the time

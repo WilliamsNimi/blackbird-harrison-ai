@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import logo from '../../assets/logo.svg';
-
+import { validation} from './validation';
 
 export default function LoginForm() {
   const [showAlert, setShowAlert] = useState(false);
@@ -18,20 +18,7 @@ export default function LoginForm() {
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
-
-    var validator = require("email-validator");
-    const email_check = validator.validate(email);
-    const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,}$/;
-    const pword_check = regex.test(password);
-    
-    if (email_check === true && pword_check === true)
-    {
-      return true;
-    }
-    else 
-    {
-      return false;
-    }
+    return validation.validation(email, password);
 
   }
 
